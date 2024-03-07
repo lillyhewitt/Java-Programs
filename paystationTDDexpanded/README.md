@@ -29,4 +29,5 @@ The simulation software should show the following features:
   -Calendar’s set() will be helpful for testing purposes.
 
 UML Diagram
+
 ![UMLpaystation](https://github.com/lillyhewitt/Java-Programs/assets/70710764/493c3859-4274-4949-8685-92e0410d144b)
