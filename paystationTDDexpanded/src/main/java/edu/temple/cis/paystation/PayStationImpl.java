@@ -1,5 +1,6 @@
 package edu.temple.cis.paystation;
 import java.util.*;
+import edu.temple.cis.paystation.RateStrategy;
 
 /**
  * Implementation of the pay station.
@@ -21,24 +22,44 @@ import java.util.*;
  * purposes. For any commercial use, see http://www.baerbak.com/
  */
 public class PayStationImpl implements PayStation {
-    
+    private RateStrategy rateStrategy;
+
     private int insertedSoFar, timeBought, totalMoney;
+
     private Map<Integer, Integer> coinMap;
+    private int dimeAmount;
+    private int nickelAmount;
+    private int quarterAmount;
+    private int zeroAmount;
 
     // Constructor initializes instance variables
     public PayStationImpl(){
         insertedSoFar = timeBought = totalMoney = 0;
         coinMap = new HashMap<>();
+        dimeAmount = 0;
+        nickelAmount = 0;
+        quarterAmount = 0;
+        zeroAmount = 0;
     }
-    
+    public void setRateStrategy(RateStrategy strategy) {
+        this.rateStrategy = strategy;
+    }
     @Override
     public void addPayment(int coinValue)
             throws IllegalCoinException {
 
         switch (coinValue) {
+            case 0:
+                zeroAmount++;
+                break;
             case 5:
+                nickelAmount++;
+                break;
             case 10:
+                dimeAmount++;
+                break;
             case 25:
+                quarterAmount++;
                 break;
             default:
                 throw new IllegalCoinException("Invalid coin: " + coinValue);
@@ -73,12 +94,31 @@ public class PayStationImpl implements PayStation {
     {
         Map<Integer, Integer> tempMap = coinMap;
         coinMap = new HashMap<>();
+
+        // adds a key with amount of each coin if that coin is present
+        if(nickelAmount > 0) {
+            tempMap.put(5, nickelAmount);
+        }
+        if(dimeAmount > 0) {
+            tempMap.put(10, dimeAmount);
+        }
+        if(quarterAmount > 0) {
+            tempMap.put(25, quarterAmount);
+        }
+        // adds none if no coins are present
+        if((nickelAmount == 0) && (dimeAmount == 0) && (quarterAmount == 0)) {
+            tempMap.put(0, 0);
+        }
+
         reset();
         return tempMap;
     }
     
     private void reset() {
         timeBought = insertedSoFar = 0;
+        nickelAmount = 0;
+        dimeAmount = 0;
+        quarterAmount = 0;
         coinMap.clear();
     }
     
