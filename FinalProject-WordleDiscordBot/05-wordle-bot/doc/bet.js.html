@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: bet.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: bet.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { SlashCommandBuilder } = require('discord.js');
+const sqlite3 = require('sqlite3').verbose();
+
+//* Connect to USER DB
+/**
+ * Represents a connection to the SQLite database for user data.
+ * @type {sqlite3.Database}
+ */
+const db = new sqlite3.Database('./userdata.db', sqlite3.OPEN_READWRITE, (err) => {
+    if (err) return console.error(err.message);
+});
+
+let wageredAmount;
+// query User's points
+/**
+ * Queries the points for a specific user from the database.
+ * @param {string} id - The unique identifier for a user.
+ * @returns {Promise&lt;number>} A promise that resolves with the points of the user.
+ */
+function queryPoints(id){
+    return new Promise((resolve,reject) => {
+        let sql
+        sql = ' SELECT points FROM users WHERE id = ?';
+        db.all(sql, [id], (err,rows)   => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            }
+                resolve(rows[0].points);
+        });
+    });
+}
+
+// update the betting amount in DB
+/**
+ * Updates the betting amount for a user in the database.
+ * @param {string} betting - The user response if betting or not
+ * @param {string} id - The unique identifier for a user.
+ */
+async function updateBetting(betting, id){
+    let sql = 'UPDATE users SET betting = ? WHERE id = ?';
+    db.run(sql, [betting, id], (err) =>{
+        if (err) return console.error(err.message);
+    });
+}
+
+// implement /bet 
+module.exports = {
+
+    /**
+     * Slash command data.
+     * @type {SlashCommandBuilder}
+     */
+
+    data: new SlashCommandBuilder()
+        .setName('bet')
+        .setDescription('Allows users to wager points on the game.'),
+
+         /**
+     * Executes the slash command to initiate betting points.
+     * @param {Object} interaction - The interaction object provided by discord.js, representing the user's command.
+     * @returns {Promise&lt;void>} A Promise that resolves when the execution is complete.
+     */
+    async execute(interaction) {
+        await interaction.reply(`Hi, ${interaction.user}. Wager points. Beware: you may double your points or lose what you wagered. Answer with "yes" or "no" '`);
+   
+        console.log(interaction.user.id);
+        const collectorFilter = message => message.content.length &lt; 4 &amp;&amp; interaction.user == message.author;
+        const collector = interaction.channel.createMessageCollector({ filter: collectorFilter, time: 90000 });
+
+        collector.on('collect', async (betValue) => {
+            betAns = (betValue.content);
+            interaction.followUp(`Your answer was ${betAns}.You are now betting all your points.`);
+            console.log(betAns);
+            updateBetting((await betAns), interaction.user.id);
+            collector.stop();
+        });
+
+        collector.on('end', collected => {
+            // store information about whether the person won or not, points awarded, etc.
+            console.log(`Collected ${collected.size} items`);
+        });
+    },
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-leaderboardCommand.html">leaderboardCommand</a></li><li><a href="module-nameCommand.html">nameCommand</a></li><li><a href="module-pingCommand.html">pingCommand</a></li></ul><h3>Global</h3><ul><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#insertUser">insertUser</a></li><li><a href="global.html#queryBetAnsw">queryBetAnsw</a></li><li><a href="global.html#queryCheckExtraPoints">queryCheckExtraPoints</a></li><li><a href="global.html#queryExtraPoints">queryExtraPoints</a></li><li><a href="global.html#queryGuess">queryGuess</a></li><li><a href="global.html#queryGuesses">queryGuesses</a></li><li><a href="global.html#queryItems">queryItems</a></li><li><a href="global.html#queryLastWord">queryLastWord</a></li><li><a href="global.html#queryPoints">queryPoints</a></li><li><a href="global.html#queryReveal">queryReveal</a></li><li><a href="global.html#queryReveals">queryReveals</a></li><li><a href="global.html#queryWin">queryWin</a></li><li><a href="global.html#queryWinStreak">queryWinStreak</a></li><li><a href="global.html#setDailyPoints">setDailyPoints</a></li><li><a href="global.html#updateAfterCheckExtraPoints">updateAfterCheckExtraPoints</a></li><li><a href="global.html#updateAfterExtraPoints">updateAfterExtraPoints</a></li><li><a href="global.html#updateAfterGuess">updateAfterGuess</a></li><li><a href="global.html#updateAfterReveal">updateAfterReveal</a></li><li><a href="global.html#updateAfterUsingExtraPoints">updateAfterUsingExtraPoints</a></li><li><a href="global.html#updateBetting">updateBetting</a></li><li><a href="global.html#updateExtraPoints">updateExtraPoints</a></li><li><a href="global.html#updateGuess">updateGuess</a></li><li><a href="global.html#updateItem">updateItem</a></li><li><a href="global.html#updateLastWords">updateLastWords</a></li><li><a href="global.html#updateLoss">updateLoss</a></li><li><a href="global.html#updatePoints">updatePoints</a></li><li><a href="global.html#updatePointsAfterExtraPoints">updatePointsAfterExtraPoints</a></li><li><a href="global.html#updatePointsAfterGuess">updatePointsAfterGuess</a></li><li><a href="global.html#updatePointsAfterReveal">updatePointsAfterReveal</a></li><li><a href="global.html#updateReveal">updateReveal</a></li><li><a href="global.html#updateStreak">updateStreak</a></li><li><a href="global.html#updateWin">updateWin</a></li><li><a href="global.html#updateWinRate">updateWinRate</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Apr 27 2024 02:09:55 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
