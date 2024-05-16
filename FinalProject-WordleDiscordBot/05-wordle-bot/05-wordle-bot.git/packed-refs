@@ -1,0 +1,20 @@
+# pack-refs with: peeled fully-peeled sorted 
+dba66c298d5ccbc1385f9664e49eb44d2feb7310 refs/heads/LillysWork
+51eeca0f84fea0f14cc5ae42157034d87caefe03 refs/heads/Nguyen
+e7c7e7dcc30fafcf5d5c8b43f0ca4dcc466f8120 refs/heads/iskraBranch
+21faad6d5b1b73231c42ed34170e27135a9b9714 refs/heads/joshBranch
+a24dd1f0c212b6caba181a11ef6f77613de4eeda refs/heads/lillyhewitt-patch-1
+9f1c0e0a5496f953401997b39738dd443944d10a refs/heads/main
+c2e1d13e4e3d43cb1490ec9bf7334856fee7659c refs/heads/minjoon_branch
+5481742972b52c36d08fabdefe6de19229ebae1f refs/heads/wordlebot_2_test
+a24dd1f0c212b6caba181a11ef6f77613de4eeda refs/pull/1/head
+0e4cb90b09f1cb0e33252debc0f3d3ab86f7d155 refs/pull/1/merge
+ff42ebaf9612f4cae4e0bf27c00b943e9d16759f refs/pull/2/head
+dba66c298d5ccbc1385f9664e49eb44d2feb7310 refs/pull/3/head
+97e931d6dc782903cf323bc975386dba5bb52ebe refs/pull/4/head
+e7c7e7dcc30fafcf5d5c8b43f0ca4dcc466f8120 refs/pull/5/head
+6394bbb186f74b5818ab214c7bb61ac3cdb95b5e refs/pull/6/head
+c2e1d13e4e3d43cb1490ec9bf7334856fee7659c refs/pull/7/head
+51eeca0f84fea0f14cc5ae42157034d87caefe03 refs/pull/9/head
+3ad495026bdab0724951622735f508fd62e4ba20 refs/pull/9/merge
+08567d5d0b9564129876d529ba3290ce100f7dd6 refs/tags/1.0.0
